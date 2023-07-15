@@ -1,4 +1,8 @@
 #!/bin/bash
+src_ip= 10.0.0.0
+dest_ip= 9.9.9.9
+src_file=/cctns_pool/IIF-5
+dest_file=/cctns_pool/IIF-5
 function check_pid {
 rsync_pid=$(pgrep rsync | wc -l)
 
@@ -15,4 +19,12 @@ exit 1
 	fi
 fi
 }
+function rsync_start {
+rsync_start=$(rsync -auvP $src_file dest_ip:dest_file )
+if [[ $? -eq 0 ]]
+then
+echo " File Copied Successfully "
+fi
+}
+
 check_pid

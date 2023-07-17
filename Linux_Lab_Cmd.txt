@@ -46,3 +46,119 @@ sudo groupdel appdevs
 
 Make sure the user jane gets a warning at least 2 days before the password expires.
 sudo chage -W 2 jane
+
+
+How can we print the value of an environment variable?
+echo $MYVAR
+
+Which of the following environment variables holds the value of user's home directory?
+$HOME
+
+Which of the following files can be used to set the globally available environment variables in a Linux based system?
+/etc/environment
+
+Print our current user's (bob) environment and save the output in /home/bob/env file.
+env > /home/bob/env
+
+Add an environment variable for user bob.
+
+
+The variable name should be MYVAR and its value should be TRUE
+vi ~/.bashrc
+export MYVAR=TRUE
+source ~/.bashrc
+
+
+Identify the value of GLOBALENV environment variable and save the same in /home/bob/globalenv file
+echo $GLOBALENV > /home/bob/globalenv
+
+
+Whenever we add a new user to the system, some files are copied, from a template directory to the user's home directory.
+Manually copy those files into /home/bob/default_data directory
+sudo cp /etc/skel/.bash*	/home/bob/default_data
+
+
+Modify the system-wide environment file and make sure that the variable GLOBALOPTION is set to this value: ON. Otherwise said, after you modify that file, any user that logs in and types
+echo $GLOBALOPTION
+should get this result:
+ON
+sudo vi /etc/environment/
+GLOBALOPTION=ON
+source /etc/environment
+
+
+Make sure that this command gets executed for any user that logs in to the system:
+echo Welcome to our server!
+sudo vi /etc/profile.d/welcome.sh
+echo "Welcome to our server! "
+
+Make sure that every time a new user account is added to the system, a file called README is copied to the new user's home directory.
+Whenever we create a new user in Linux the files in /etc/skel directory get copied into the user's home, so we can create a README in /etc/skel directory so that it gets copied to the newly created user's home.
+Execute below given command to do so:
+
+
+Set a variable named LFCS with value Welcome to the KodeKloud LFCS Labs! for every user that logs into this system.
+sudo vi /etc/environment
+LFCS=Welcome to the KodeKloud LFCS Labs!
+source /etc/environment
+
+Update the value of $PATH variable for user bob to include $HOME/.config/bin location in the path.
+sudo vi /home/bob/.bashrc
+PATH="$HOME/.local/bin:$HOME/bin:$HOME/.config/bin:$PATH"
+source ~/.bashrc
+
+
+
+from below, which keyword can we use to limit the number of processes a user can run?
+nproc
+
+how will we allow user trinity to run command without sudo
+sudo gpasswd -a trinity wheel 
+
+Modify the security limits file and make sure that the user called trinity can run no more than 30 processes in her session.
+This should be both a hard limit and a soft limit, written in a single line.
+vi /etc/security/limits.conf
+trinity - nproc 30
+
+
+Identify all the security limits currently applied in our user's session and save the same in /home/bob/limits file.
+ulimit -a > /home/bob/limits
+
+Modify the sudoers file in such a way to allow the user called trinity to run any sudo command without needing to provide her password.
+sudo isudo /etc/sudoers
+trinity ALL=(ALL) NOPASSWD: ALL
+save and exit.
+
+Modify the sudoers file again. Remove your previous entry for the user called trinity if it still exists.
+Now add a new entry that allows trinity to only run the /usr/bin/mount command with sudo.
+suddo visudo /etc/sudoers
+trinity ALL=(ALL) /usr/bin/mount 
+
+Make changes in security limits file for user stephen so that he can create maximum filesize upto 4 MB. This should be a hard limit.
+sudo  vi /etc/security/limits.conf
+stephen hard fsize 4096
+
+Set a soft limit of 20 processes for everyone in the salesteam group.
+sudo vi /etc/security/limits.conf
+@salesteam     soft    nproc     20
+
+
+Define a policy for all the users in the salesteam group to run any sudo command.
+sudo vi /etc/sudoers
+%salesteam     ALL=(ALL)     ALL
+
+Define a policy, so that user trinity be able to run sudo commands as the user sam.
+sudo vi /etc/sudoers
+trinity ALL=(sam) ALL
+
+
+We applied a hard limit of 10 processes for all the users under developers group, but somehow the limit isn't working. Look into the issue and fix the same.
+sudo vi /etc/security/limits.conf
+@developers     hard    nproc  10
+
+
+Modify the sudoers file again. Remove your previous entry for the user called trinity if it still exists.
+Now add a new entry that allows trinity to run all commands with sudo, but only after entering the password.
+sudo visudo /etc/sudoers
+trinity ALL=(ALL) ALL
+

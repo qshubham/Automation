@@ -162,3 +162,52 @@ Now add a new entry that allows trinity to run all commands with sudo, but only 
 sudo visudo /etc/sudoers
 trinity ALL=(ALL) ALL
 
+Where do we configure static hostname resolution?
+cat /etc/hosts
+
+How do we see what processes on our system are listening for incoming network connections, on the TCP and UDP protocols?
+ss -tulnp
+
+Identify the IP address of the eth0 interface on our current system.
+Create a file called /home/bob/ip and save the ip address value (without subnet) in it.
+ip a
+vi /home/bob/ip
+
+Identify the default gateway on this system and store the output (only the IP address) in /home/bob/gateway.txt file
+ip route show
+vi /home/bob/gateway.txt
+
+Find out what process is listening for incoming connections on port 22, and identify its PID.
+Create a file called /home/bob/pid and save the PID value in it.
+ss -tlnp |grep 22 > /home/bob/pid
+
+Now, find out what process is listening for incoming connections on port 67, and identify its PID.
+Create a file called /home/bob/process_pid and save the PID value in i
+sudo ss -tulnp| grep :67 
+
+So now let's try to identify the process name based on the port it's listening on, find out the process name that is listening for incoming connections on port 8080.
+netstat -natp | grep 8080
+
+Configure static resolution so that example.com hostname resolves to IP address 8.8.8.8.
+echo "8.8.8.8 example.com " > /etc/hosts
+
+Our system uses dynamic network configuration. Leave it as it is, dynamically configured, but add an extra IP to eth1 interface on this system: 10.0.0.50/24.
+sudo ip a add 10.0.0.50/24 dev eth1
+sudo nmcli device reapply eth1
+
+Check the network route of this system and store the output in /home/bob/route.txt file.
+sudo ip route show > /home/bob/route.txt
+
+
+Get the list of all incoming open ports on this system and store the output in /home/bob/incoming.txt file.
+sudo netstat -tulpn | grep LISTEN > /home/bob/incoming.txt
+
+Add a new DNS resolver 8.8.8.8 on this system.
+sudo vi /etc/resolv.conf
+nameserver 8.8.8.8
+
+Identify the transient hostname of this system and save the value in /home/bob/t-hostname file.
+hostnamectl > /home/bob/t-hostname
+
+Now, update the static hostname to match the transient hostname on this system.
+hostnamectl set-hostname 

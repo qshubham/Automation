@@ -1,0 +1,137 @@
+1.Write a Bash script that takes two numbers as command-line arguments and prints their sum.
+#!/bin/bash
+echo "Enter 2 No. to sum "
+read  n1
+read  n2
+sum=$((n1 + n2))
+echo "Sum is $sum "
+
+2.Write a shell script that takes a filename as input and checks if the file exists. If the file exists, it should display "File exists," otherwise, it should display "File not found."
+#!/bin/bash
+echo  -e " Enter File Name to see : \c"    # -e is used to check whether file exists or not.
+read filename
+if [[ -e $filename ]]
+then 
+echo " File found "
+else 
+echo " File not found "
+fi 
+
+3.Write a shell script that takes a number as input and checks if it is even or odd. If the number is even, it should display "The number is even," otherwise, it should display "The number is odd."
+#/bin/bash
+echo "enter No to check odd or even :"
+read num
+if  [[ $((num % 2)) -eq 0 ]]      #(spcae is require in beging & before close, conditional operator is used here can also be solved using arithmetic evaluation. (( num % 2 == 0))  )
+then 
+echo "$num is even."
+else
+echo " Enter a valid value "
+fi
+
+4.Write a shell script that takes three numbers as input and finds the largest number among them. Display the largest number as the output.
+echo " Enter 3 no to check largest of them : "
+read n1
+read n2
+read n3
+if [[ $n1 -gt $n2 && $n1 -gt $n3 ]]
+then
+echo " $n1 is greatest. "
+elif [[ $n2 -gt $n1 && $n2 -gt $n3 ]]
+then
+echo " $n2 is greatest "
+else 
+echo " $n3 is greatest "
+fi
+
+5.Write a shell script that acts as a simple calculator. The script should prompt the user to enter two numbers and an operator (+, -, *, or /). Based on the provided operator, the script should perform the corresponding arithmetic operation and display the result.
+#!/bin/bash
+echo " Enter the Operation you want to perform : "
+read operator
+echo " Enter two no to perform operation : "
+read n2
+read n3
+if [[  $operator == "+" ]];then
+result= $(( n2 + n3 ))
+elif [[  $operator == "-" ]];then
+result= $(( n2 - n3 ))
+elif [[  $operator == "*" ]];then
+result= $(( n2 * n3 ))
+elif [[  $operator == "/" ]];then
+if [[ $n3 -ne 0 ]];then
+result=$(echo "scale=2; $num1 / $num2" | bc)
+  else
+    echo "Error: Division by zero is not allowed."
+    exit 1
+  fi
+else
+  echo "Error: Invalid operator."
+  exit 1
+fi
+
+echo "Result: $result"
+
+6.Write a shell script that takes a directory path as input and counts the number of files and directories inside it. The script should then display the count of files and directories separately.
+#!/bin/bash 
+echo " Enter the path of directory : "
+read dir
+d_count=$(( $(find "$dir" -type d | wc -l) ))
+f_count=$(( $(find "$dir" -type f | wc -l) ))
+echo " Total file is $f_count and directory $d_count "
+
+Same SOln another way.
+
+#!/bin/bash
+echo " Enter the Path of directory "
+read directory 
+if [[ ! -d $directory ]];then 
+echo " No Directory found . "
+exit 1
+fi 
+f-count=0
+d-count=0
+for entry in "$directory"/*;do
+if [[ -f "$entry" ]];then
+((f-count++))
+elif [[ -d "$entry" ]];then
+((d-count++))
+fi 
+done
+echo " total file $f-count and total dir $d-count "
+
+7.Write a shell script that takes a filename as input and creates a backup of that file. The script should prompt the user for the filename and then copy the contents of the file into a new file with ".bak" appended to the original filename. For example, if the user enters "example.txt" as the input, the script should create a backup file called "example.txt.bak".
+#!/bin/bash
+echo " Enter the filename for backup : "
+read fname
+if [[ ! -f $fname ]];then
+echo " Not a file."
+exit 1
+fi
+bk_fname="${fname}.bak"  #(Adding name extension in variable eg: ans ans.bak )
+cp "$fname" "$bk_fname"
+echo "backup file created : $bk_fname "
+
+
+Write a shell script that generates a random password for the user. The script should prompt the user to enter the desired password length and then generate a random password containing alphanumeric characters. The password should be displayed as the output.
+#!/bin/bash
+echo " Enter the passwd Length "
+read plength 
+characters="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+passwd=""
+for (( i=0; i<plength ; i++ ));do
+rand_index=$((RANDOM % ${#characters}))
+passwd+=${characters:$rand_index:1}
+done
+echo "Random password: $passwd"
+
+
+-------------------------------For loop Explanation-----------------------------------------
+for (( i = 0; i < length; i++ )); do: This line starts a loop. It will repeat the following actions from i = 0 until i becomes equal to or greater than the value of length. i++ means that i will increase by 1 in each loop iteration.
+
+rand_index=$((RANDOM % ${#characters})): In each iteration of the loop, this line generates a random number (rand_index) between 0 and the length of the characters string minus 1. It is done using $RANDOM, which provides a random number, and % (modulo operator) to limit it within the length of the characters string.
+
+password+=${characters:$rand_index:1}: This line appends a single character from the characters string to the password variable. The ${characters:$rand_index:1} part means to extract one character from the characters string starting at the index rand_index. The extracted character is then added to the password.
+
+done: This keyword marks the end of the loop block. After the loop finishes running length times, the loop will stop, and the script will continue executing the subsequent commands.
+
+In summary, the for loop generates a random index (rand_index) within the range of characters available in the characters string. In each iteration, it appends one character from the characters string, based on the random index, to the password variable. After the loop finishes, the password will contain the desired random password with the specified length and characters.
+---------------------------------------------------------------------------------------------------------------------------------

@@ -211,3 +211,137 @@ hostnamectl > /home/bob/t-hostname
 
 Now, update the static hostname to match the transient hostname on this system.
 hostnamectl set-hostname 
+
+
+Allow Permanent TCP incoming connections to port 7869
+sudo firewall-cmd --add-port=7869/tcp --permanenty
+
+Add a permanent firewall rule to allow the https service.
+sudo firewall-cmd	--add-service=https --permanent
+
+Use firewall-cmd to list all current firewall rules. You will see UDP traffic to a certain port has been enabled. The rule is temporary, not permanent (runtime rule that disappears at next boot). Remove the firewall rule that allows traffic to this port number.
+sudo firewall-cmd --remove-port=53/udp --permanent
+
+Allow all traffic that is coming from any IP in this network range: 10.11.12.0 to 10.11.12.255 (i.e 10.11.12.0/24), add the required rule in the trusted zone and the rule must be permanent.
+sudo firewall-cmd --add-source=10.11.12.0/24 --zone=trusted --permanent
+
+There are a couple of rules we added in the firewall but those are just runtime rules (not permanent).
+Make all of these runtime rules permanent.
+sudo firewall-cmd --runtime-to-permanent
+
+
+Temporarily route all traffic that must reach the 192.168.0.* network through the device that has the IP 172.28.128.100
+sudo ip route add 192.168.0.0/24 via 172.28.128.100
+
+Now, permanently route all traffic that must reach the 192.168.0.* network through the device that has the IP 172.28.128.100
+Also tell the NetworkManager to immediately apply the network settings we just changed.
+sudo nmcli connection modify eth1 +ipv4.routes "192.168.0.0/24 172.28.128.100"
+sudo nmcli device reapply eth1
+
+
+Delete the route you just created in the previous question to permanently route all traffic that must reach the 192.168.0.* network through the device that has the IP 172.28.128.100
+Also tell the NetworkManager to immediately apply the network settings we just changed.
+sudo nmcli connection modify eth1 -ipv4.routes "192.168.0.0/24 172.28.128.100"
+sudo nmcli device reapply eth1
+
+
+Check out the route table and find out the default gateway for eth0 connection on this system and store the output (only the IP address) in /home/bob/gateway.txt file.
+ip route show
+
+
+This system uses dynamic network configuration. We won't change that, but add an extra IP to eth1 interface on this system: 10.0.0.50/24.
+sudo ip a add 10.0.0.50/24 dev eth1
+
+Check all available timezones on this system and filter out American timezones only (for example America/Phoenix, America/Santiago etc).
+Further save the filtered output in /home/bob/america file.
+CheckCompleteIncomplete
+timedatectl list-timezones | grep America > /home/bob/america
+
+Configure the timezone on this system and set it to Asia/Kolkata:
+sudo timedatectl set-timezone Asia/Kolkata
+
+Configure the system to automatically synchronize its time through the chrony daemon. Make sure the daemon is enabled so that it automatically starts every time the system boots.
+sudo timedatectl set-ntp=true
+sudo systemctl enable chronyd
+
+Using timedatectl configure RTC (real-time clock) to maintain the RTC in local time.
+RTC is a battery-powered computer clock that keeps track of the time even when the system is turned off.
+
+sudo timedatectl set-local-rtc 1
+
+
+Which is the configuration file of our Bind DNS server?
+/etc/named.conf
+
+Where does bind DNS server store all zone files on a RedHat based linux machine?
+/var/named
+
+Install bind DNS server on this system.
+dnf install bind bind-utils
+
+Configure the Bind daemon to accept queries from any IP on the Internet. Make sure to start named service after making required changes in the configuration.
+
+sudo vi /etc/named.conf
+Add below given line in it under recursing-file "/var/named/data/named.recursing"; line
+allow-query    { 0.0.0.0/0; };
+Start named.service:
+sudo systemctl start named.service
+
+We have added a new zone file /var/named/example.com.zone which contains DNS configuration for example.com domain.
+Query the local DNS server and identify the current A record value for example.com domain. (without updating any relevant configuration) and save the value in /home/bob/a-record file. (only the IP address)
+CheckCompleteIncomplete
+
+dig @localhost example.com
+
+
+You might have noticed that in the previous question, the A record value for example.com domain is different what we have in /var/named/example.com.zone DNS zone file. Which means, this file isn't in use yet or DNS server hasn't read it yet.
+Make the required changes so that the local zone file changes can take effect.
+CheckCompleteIncomplete
+
+sudo vi /etc/named.conf
+Add below given block at the end of the file:
+zone    "example.com" IN {
+        type master;
+        file "example.com.zone";
+};
+sudo systemctl restart named.service
+
+
+Modify /var/named/example.com.zone and add a new entry so that this subdomain
+database.example.com
+has this IP address: 1.2.3.4
+Don't forget to restart the named.service after you've made your change.
+
+sudo vi  /var/named/example.com.zone
+and add below given line in it:
+database                A       1.2.3.4
+sudo systemctl restart named.service
+
+
+Modify /var/named/example.com.zone and make mysql.example.com an alias for database.example.com by adding the proper CNAME entry. Otherwise said, mysql.example.com should point to database.example.com. Restart the named.service after you've added the new entry.
+sudo vi  /var/named/example.com.zone
+mysql.example.com CNAME database.example.com.
+sudo systemctl restart named.service
+
+
+By default the bind server also fetches DNS data from other DNS servers on the Internet, when it does not have it available in its own cache. But somehow our bind server is not able to query the kodekloud.com domain data.
+
+sudo vi /etc/named.conf
+Look for recursion and make sure its value is set to yes
+recursion yes;
+sudo systemctl restart named.service
+
+Using dig utility retrieve all record types (including MX, TXT etc) associated with our example.com domain and save the output in /home/bob/records file.
+dig @localhost -q example.com ANY > /home/bob/records
+
+Change the TTL for example.com domain to tell other DNS servers that, they may query our zone to cache this data for 2 hours.
+sudo vi /var/named/example.com.zone
+In the beginning of the file change $TTL value from 1H to 2H
+$TTL 2H
+sudo systemctl restart named.service
+
+
+
+
+
+

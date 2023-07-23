@@ -1,0 +1,22 @@
+LOcal installation on VM
+1.Jenkins /argo CD (Writig jenkinsfile along with pipeline.)
+2.Apache (Host Site, SSL site, Multiple site )
+3.minikube (kubernertes)
+4.Terraform 
+5.Tomcat 
+6.Ansible
+7.docker
+8.haproxy
+9.nginx
+10.squid
+
+3. Minikube Installation on ROcky Linux
+Installation using rpm package :
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-latest.x86_64.rpm
+sudo rpm -Uvh minikube-latest.x86_64.rpm
+$ sudo dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
+sudo dnf repolist
+sudo dnf install docker-ce docker-ce-cli containerd.io -y
+
+Start yor cluster 
+minikube start

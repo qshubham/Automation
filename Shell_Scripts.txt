@@ -135,3 +135,55 @@ done: This keyword marks the end of the loop block. After the loop finishes runn
 
 In summary, the for loop generates a random index (rand_index) within the range of characters available in the characters string. In each iteration, it appends one character from the characters string, based on the random index, to the password variable. After the loop finishes, the password will contain the desired random password with the specified length and characters.
 ---------------------------------------------------------------------------------------------------------------------------------
+
+8.Write a shell script that takes a filename as input and counts the number of words, lines, and characters in that file. The script should prompt the user for the filename and then display the counts as output.
+
+#!/bin/bash
+echo " Enter file name : "
+read fname
+if [[ ! -f "$fname" ]]; then
+echo " File name not exist. "
+exit 1
+fi 
+wc_cnt=$( cat "$fname" | wc -w )
+lc_cnt=$( cat "$fname" | wc -l )
+cc_cnt= $( cat "$fname" | wc -c )
+echo " Total no of word count is "$wc_cnt" "
+echo " Total no of line count is "$lc_cnt" "
+echo " Total no of char count is "$cc_cnt" "
+
+
+9.Write a shell script that takes a directory path as input and lists all the files and directories inside it. The script should prompt the user for the directory path and then display the list of files and directories as separate outputs.
+#!/bin/bash
+echo " Enter path to check directories and files : "
+read path
+if [[ ! -d "$path" ]];then
+echo " Enter correct directory path ."
+exit 1
+fi
+dcnt=$( find "$path"/* -type d | wc -l )
+fcnt=$( find "$path"/* -type f | wc -l )
+echo " dir count is "$dcnt" "
+echo " file count is "$fcnt" "
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+To find and extract numbers from the file abc using command-line tools, you can use grep and awk. Here's how you can do it:
+Assuming the file abc contains the following words:
+abc239
+34csd
+wrq
+Required Output : 239
+				  34
+soln : cat abc.txt | grep -Eo [0-9]*   #( -E enables extended regular expression , -o tells grep to only output the matching pattern.)
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+
+10.Write a shell script that takes a word as input and checks if it is a palindrome. A palindrome is a word that reads the same backward as forward (ignoring spaces and capitalization). The script should prompt the user to enter a word and then display whether the word is a palindrome or not.
+
+
+
+
+
+
+

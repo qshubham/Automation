@@ -20,3 +20,21 @@ sudo dnf install docker-ce docker-ce-cli containerd.io -y
 
 Start yor cluster 
 minikube start
+ nmcli dev status
+    2  nmcli con up ens160
+    3  nmcli connection modify ens160  connection.autoconnect yes
+    4  su -
+    5  minikube start --driver docker
+    6  minikube status
+    7  kubectl cluster-info
+    8  kubectl get nodes
+    9  kubectl create deployment nginx-demo --image=nginx
+   10   kubectl expose deployment nginx-demo --type NodePort --port=80
+   11  kubectl get pods,svc
+   12  minikube service nginx-demo --url
+   13  curl http://192.168.49.2:31707
+   14  curl http://192.168.49.2:30009
+   15  minikube addons list
+   16  minikube addons enable dashboard
+   17   minikube addons enable metrics-server
+   18  minikube addons enable ingress

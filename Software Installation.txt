@@ -65,4 +65,30 @@ minikube start
 						hint: Turn this message off by running
 						hint: "git config advice.addIgnoredFile false"
 
---------------------------------------------------------------------
+--------------------------------------------------------------------Git Recovery-------------------
+$ git reflog
+a347c12 (HEAD -> main) HEAD@{0}: merge recover2: Merge made by the 'ort' strategy.
+30d3009 (recover1) HEAD@{1}: checkout: moving from recover2 to main
+531ff12 (recover2) HEAD@{2}: checkout: moving from main to recover2
+30d3009 (recover1) HEAD@{3}: merge recover1: Fast-forward
+6cec47a (recovery) HEAD@{4}: checkout: moving from recover1 to main
+30d3009 (recover1) HEAD@{5}: checkout: moving from 30d30090f436d734e0292a2192eddbb3ce19dad3 to recover1
+30d3009 (recover1) HEAD@{6}: checkout: moving from recovery to 30d30090f436d734e0292a2192eddbb3ce19dad3
+6cec47a (recovery) HEAD@{7}: checkout: moving from main to recovery
+6cec47a (recovery) HEAD@{8}: checkout: moving from main to main
+6cec47a (recovery) HEAD@{9}: checkout: moving from ansible to main
+bb58a84 (ansible) HEAD@{10}: pull https://github.com/PacktPublishing/Ansible-for-Real-life-Automation.git --allow-unrelated-histories: Merge made by the 'ort' strategy.
+6cec47a (recovery) HEAD@{11}: reset: moving to HEAD@{1}
+531ff12 (recover2) HEAD@{12}: pull https://github.com/PacktPublishing/Ansible-for-Real-life-Automation.git --allow-unrelated-histories: Merge made by the 'ort' strategy.
+6cec47a (recovery) HEAD@{13}: checkout: moving from main to ansible
+6cec47a (recovery) HEAD@{14}: commit: Add .gitignore file
+b1d5ebd HEAD@{15}: commit: Latest Update
+6bc0213 HEAD@{16}: commit: Updated Linux,Shell file , Sotware installation.
+b2ad53f HEAD@{17}: commit: NW LAB & DNS Lab Update
+f2e0e09 HEAD@{18}: commit: Updated Lab
+f53117a HEAD@{19}: commit: Updated Lab For Env Varaible
+cf64847 HEAD@{20}: commit: Latest File with func changes
+79460f9 HEAD@{21}: commit: Entered the additional function rsync start
+d1651d4 HEAD@{22}: commit: Readme File Updated
+9b9f6a9 HEAD@{23}: commit (initial): Intial v1 file
+

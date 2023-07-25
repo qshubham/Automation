@@ -342,6 +342,147 @@ sudo systemctl restart named.service
 
 
 
+In what file can we edit the settings of our SSH server?
+/etc/ssh/sshd_config
+
+In a squid proxy server, what does this line do?
+http_access allow localnetwork
+
+ It makes it accept incoming connections from whatever was defined in the ACL named "localnetwork"
+
+Edit the configuration of the SSH server and disable password logins.
+vi /etc/ssh/sshd_config
+PermitRootAuthentication no 
+systemctl status restart	sshd
+
+Edit the system-wide configuration of the SSH client and turn on X11 forwarding.
+sudo vi /etc/ssh/sshd_config
+x11forwarding yes
+sudo systemctl restart sshd
+
+Install squid proxy server on this system and start its service.
+sudo dnf install squid
+sudo systemctl restart squid
+
+Edit the config file of the Squid proxy daemon. Modify it to deny access to the IP addresses defined in the ACL called localnet
+sudo vi /etc/squid/squid.conf 
+And change http_access allow localnet line to http_access deny localnet
+http_access deny localnet
 
 
+
+Edit the configuration of the Squid proxy daemon. Add a src type acl and name it vpn. The IP you should use in this acl is 203.0.110.5. Now add a new rule that tells the proxy server to allow access to the acl named vpn.
+sudo vi /etc/squid/squid.conf
+Add this line
+acl vpn src 203.0.110.5
+Add below given line in the same file before http_access deny all line:
+http_access allow vpn
+
+
+Edit the configuration of the SSH server and configure it to use only IPv4 IP address family.
+sudo vi /etc/ssh/sshd_config
+Uncomment the below given line in it:
+#AddressFamily any
+and change it to (add it if doesn't exist):
+AddressFamily inet
+
+Edit the configuration of the Squid proxy daemon. Now add a new rule that allow http access to the external
+sudo vi /etc/squid/squid.conf
+Add below given line in this file after http_access allow localhost line:
+http_access allow external
+
+
+Edit the configuration of the Squid proxy daemon , add an acl and http access rule to block facebook.com.
+sudo vi /etc/squid/squid.cong
+acl facebook dstdomain .facebook.com
+And add below given line after http_access allow localhost line:
+http_access deny facebook 
+Edit the configuration of the SSH server and re-enable password logins, but disable the SSH login for user root.
+vi /etc/ssh/sshd_config
+PermitRootAuthentication yes 
+passwordAuthentication yes
+PermitRootLogin no 
+systemctl status restart	sshd
+
+In configuration file of the SSH server, change the maximum number of authentication attempts permitted per connection to 4
+sudo vi /etc/ssh/sshd_config
+Uncomment below given line or add it if doesn't exist:
+MaxAuthTries 4
+sudo systemctl restart sshd
+
+
+--------Storage LAB -----------------------------
+How do we display block devices, such as disks or partitions?
+lsblk
+
+How do we format a partition as swap space?
+mkswap /dev/vdb3
+
+Identify the partition name of the virtual disk where / is mounted on this system
+lsblk
+
+Find out the swapfile used on this system and save its exact path in /home/bob/swap file. 
+swapon --show               
+
+                                                                                                                                                          Create three primary partitions on /dev/vdb.
+
+Create three primary partitions on /dev/vdb.
+First should have 10MB, second should have 21MB and the third should have 15MB.
+sudo cfdisk /dev/vdb
+lsblk
+
+Format the 21MB partition as swap. Next, make it active, tell Linux to start using it as swap memory.
+sudo mkswap /dev/vdb2
+sudo swapon /dev/vdb2
+sudo swapon --show
+
+Tell Linux to stop using the 21MB partition as swap.
+sudo swapoff /dev/vdb2
+
+Increase the existing swap (i.e /swapfile) size by 1GB.
+sudo dd if=/dev/zero of=/swapfile bs=1M count=1024 oflag=append conv=notrunc
+Disable the swap file:
+sudo swapoff /swapfile
+Setup the file as a swap file again.
+sudo mkswap /swapfile
+Enable again swaping:
+sudo swapon /swapfile
+
+
+
+------------------------------Create File System and mount----------------------------------------------
+What file do we need to edit to tell the Linux OS which filesystems it should automatically mount when it boots up?
+/etc/fstab
+
+We want to create an xfs filesystem on /dev/vdb1 with the label BackupVolume. What is wrong with this command?
+sudo mkfs.xfs -l "BackupVolume" /dev/vdb1
+The lowercase -l option is wrong. It should be -L, with an uppercase L.
+
+Create an xfs filesystem with the label "DataDisk" on /dev/vdb.
+sudo mkfs.xfs -L "DataDisk" /dev/vdb
+
+Create an ext4 filesystem with a number of 2048 inodes on /dev/vdc.
+sudo mkfs.ext4 -N 2048 /dev/vdc
+
+Mount /dev/vdb in the /mnt/ directory.
+sudo mount /dev/vdb /mnt/
+
+Unmount the filesystem mounted in the /mnt/ directory.
+sudo umount  /mnt/
+
+Configure the system to automatically mount /dev/vdc when it boots up. This partition has an ext4 filesystem on it. It should mount the filesystem to the /test directory. This directory does not exist, make sure you create it first.
+Also make sure this filesystem should be checked on boot.
+sudo mkdir /test
+sudo mount /dev/vdc /test/
+vi /etc/fstab
+/dev/vdc /test ext4 defaults 0 2
+
+Configure the system to automatically use /dev/vdb as swap when it boots up.
+For now you need not to reboot the system after making the required changes
+vi /etc/fstab
+/dev/vdb none swap defaults 0 0
+reboot
+
+Change the label for /dev/vdb filesystem to SwapFS
+sudo  xfs_admin -L "SwapFS" /dev/vdb
 

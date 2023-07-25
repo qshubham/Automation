@@ -180,8 +180,31 @@ soln : cat abc.txt | grep -Eo [0-9]*   #( -E enables extended regular expression
 
 
 10.Write a shell script that takes a word as input and checks if it is a palindrome. A palindrome is a word that reads the same backward as forward (ignoring spaces and capitalization). The script should prompt the user to enter a word and then display whether the word is a palindrome or not.
+#!/bin/bash
+echo " Enter the word : "
+read word
+clean_wrd=$( echo "$word " | tr -d '[:space;]' | tr '[:upper:]' '[:lower:]' )
+rev_wrd=$( echo "$clean_wrd" | rev )
+if [[ "$clean_wrd"=="$rev_wrd" ]];then
+echo " $word is a palindrome.
+else
+echo " $word not a palindrome. "
+fi
 
-
+11.Write a shell script that takes a filename as input and creates a backup of that file with a timestamp appended to the original filename. The script should prompt the user for the filename and then copy the contents of the file into a new file with the original filename and a timestamp in the format "YYYY-MM-DD-HH-MM-SS" appended to it. For example, if the user enters "example.txt" as the input, the script should create a backup file called "example_2023-07-20-14-30-00.txt" (assuming the script is executed on July 20, 2023, at 2:30 PM).
+#!/bin/bash
+echo "Enter the file name : "
+read fname
+if [[ ! -f $fname ]];then
+echo " Not a filename "
+exit 1
+fi
+dt=$(  date "+%Y-%m-%d-%H-%M-%S")
+bkp_fname="${fname}_${dt}.txt"
+if [[ -f $fname ]];then
+cp "$fname" "$bkp_fname"
+echo " file Created successfully. "
+fi
 
 
 

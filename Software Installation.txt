@@ -38,3 +38,31 @@ minikube start
    16  minikube addons enable dashboard
    17   minikube addons enable metrics-server
    18  minikube addons enable ingress
+
+
+
+
+---------------Terraform Installation------------------------
+1.sudo yum install yum-utils
+2.sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
+3. sudo yum install epel-release -y
+4.sudo yum install terraform -y
+5.terraform version
+
+
+---------------Git .gitignore command -------------------------
+1.Go to main branch 
+2.vi .gitignore
+   Enter file to avoid commit eg: abc.txt
+3. git add .gitignore
+4. git commit -m " Add .gitignore file " 
+5.  Now try to add  & commit abc.txt it will give error.
+		
+		Sample Output : $ git add abc.txt
+						The following paths are ignored by one of your .gitignore files:
+						abc.txt
+						hint: Use -f if you really want to add them.
+						hint: Turn this message off by running
+						hint: "git config advice.addIgnoredFile false"
+
+--------------------------------------------------------------------

@@ -92,3 +92,42 @@ cf64847 HEAD@{20}: commit: Latest File with func changes
 d1651d4 HEAD@{22}: commit: Readme File Updated
 9b9f6a9 HEAD@{23}: commit (initial): Intial v1 file
 
+=================================History Command ============================================
+ history | grep git
+    5  curl -Lo https://github.com/PacktPublishing/Ansible-for-Real-life-Automation/tree/main
+    6  curl  https://github.com/PacktPublishing/Ansible-for-Real-life-Automation/tree/main
+    8  git https://github.com/PacktPublishing/Ansible-for-Real-life-Automation.git
+    9  git pull https://github.com/PacktPublishing/Ansible-for-Real-life-Automation.git
+   11  git checkout -b ansible
+   12  git pull https://github.com/PacktPublishing/Ansible-for-Real-life-Automation.git --allow-unrelated-histories
+   13  git reset --hard HEAD@{1}
+   16  git add Ansible
+   19  git init
+   20  git pull https://github.com/PacktPublishing/Ansible-for-Real-life-Automation.git --allow-unrelated-histories
+   21  git status
+   23  git status
+   24  git fsck --lost-found
+   25  git checkout main
+   27  git fsck --lost-found
+   28  git status
+   29  git status -s
+   30  cd .git/lost-found/
+   35  git show 30d30090f436d734e0292a2192eddbb3ce19dad3
+   36  git branch main 30d30090f436d734e0292a2192eddbb3ce19dad3
+   37  git checkout -b recovery
+   38  git checkout main
+   39  git checkout main
+   43  git checkout main
+   44  git checkout -b recovery
+   45  git checkout -b recovery 30d30090f436d734e0292a2192eddbb3ce19dad3
+   46  git checkout  30d30090f436d734e0292a2192eddbb3ce19dad3
+   48  git checkout -b recover1 30d30090f436d734e0292a2192eddbb3ce19dad3
+   49  git checkout main
+   50  git merge recover1
+   51  git checkout -b recover1 531ff12d6d7cad78e129d2400a2e3145ade18cb0
+   52  git checkout -b recover2 531ff12d6d7cad78e129d2400a2e3145ade18cb0
+   53  git checkout main
+   54  git merge  recover2
+   55  git history
+   56  git reflog
+==================================================================================================

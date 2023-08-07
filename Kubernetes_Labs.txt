@@ -1,0 +1,26 @@
+To start minikube cluster
+minikube start
+
+To Check minikube status
+minikube status
+
+To check kubelet verion
+kubectl version --short
+
+To list all pods 
+kubectl get pods
+
+To stop a pod 
+kubectl delete pod nginx-demo-7c7dd79bb7-fsstz
+
+Command to make pod accesible from outsside the cluster 
+kubectl expose pod hello-kube --type=LoadBalancer --port=80
+
+TO check load balancer and other service status
+kubectl get service
+
+To get the access url run below command
+minikube service hello-kube
+
+Command too inspect the kuberntes pod 
+kubectl describe pods hello-kube

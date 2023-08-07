@@ -486,3 +486,50 @@ reboot
 Change the label for /dev/vdb filesystem to SwapFS
 sudo  xfs_admin -L "SwapFS" /dev/vdb
 
+
+--------------------------------Manage lvm and encrypted Storage--------------------------------------------------
+Install lvm on this system.
+sudo dnf install lvm2
+
+Add these four disks as PVs (Physical Volumes) to LVM: /dev/vdb, /dev/vdc, /dev/vdd and /dev/vde.
+sudo pvcreate /dev/vdb /dev/vdc /dev/vdd /dev/vde
+
+Use the correct command to display a list of Physical Volumes (PVs) used by LVM. What is the PSize of /dev/vdc? Save the value in /home/bob/pvsize file.
+sudo pvs 
+vi /home/bob/pvsize
+
+Remove the /dev/vde physical volume from LVM.
+sudo pvremove /dev/vde
+
+Create a Volume Group (VG) named volume1. It should be created on these two Physical Volumes: /dev/vdb and /dev/vdc.
+sudo vgcreate volume1 /dev/vdb /dev/vdc
+
+Imagine that our volume group, volume1 is running out of free space. It currently uses /dev/vdb and /dev/vdcto store data. Add /dev/vdd to this volume group so that we gain more usable storage space.
+
+sudo vgextend volume1 /dev/vdd   (vgextend for adding volume disk ) 
+
+Remove /dev/vdd from the volume group volume1.
+sudo vgreduce  volume1 /dev/vdd
+
+Use the command that displays all of the volume groups. What is the VSize of volume1?
+sudo vgs
+
+Create a Logical Volume (LV). It should have these properties:
+1. The size of the LV should be 1.5 Gigabytes.
+2. Its name should be smalldata.
+3. The logical volume should be created on the volume group named volume1.
+
+sudo lvcreate --size 1.5G --name smalldata volume1
+
+Resize the Logical Volume called smalldata to 1 Gigabyte.
+This logical volume resides on the volume group called volume1.
+sudo lvresize --size 1G volume1/smalldata
+
+Create an XFS filesystem on the logical volume called smalldata.
+This logical volume exists on the volume group called volume1.
+
+sudo mkfs.xfs /dev/volume1/smalldata
+
+
+Destroy/Remove the Logical Volume called smalldata.
+sudo lvremove smalldata

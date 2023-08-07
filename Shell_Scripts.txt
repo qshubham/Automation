@@ -215,7 +215,6 @@ read number
 # Check if the number is less than 2 (not a prime number)
 if [ $number -lt 2 ]; then
   echo "The number is not a prime number."
-  exit 0
 fi
 
 is_prime=true
